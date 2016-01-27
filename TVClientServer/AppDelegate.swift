@@ -7,15 +7,29 @@
 //
 
 import UIKit
-
+import TVMLKit
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+class AppDelegate: UIResponder, UIApplicationDelegate ,TVApplicationControllerDelegate{
+    var appController: TVApplicationController?
     var window: UIWindow?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let tvControllerContext = TVApplicationControllerContext()
+        let jsURL = NSURL(string: "http://localhost:8000/application.js") 
+        tvControllerContext.javaScriptApplicationURL = jsURL!
+        tvControllerContext.launchOptions["BASEURL"] = "http://localhost:8000/"
+        // assign all launch options of the app to the launch options of tvControllerContext
+//        if let options = launchOptions {
+//            for (kind, value) in options {
+//                if let kindStr = kind as? String {
+//                    tvControllerContext.launchOptions[kindStr] = value
+//                }
+//            }
+//        }
+        self.appController = TVApplicationController(context: tvControllerContext, window: self.window, delegate: self)
         return true
     }
 
